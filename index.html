@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REPOSITORIO ROSARISTA - I.E.T.I. Nuestra Señora del Rosario</title>
+    <meta name="description" content="Portal educativo con recursos offline para Electrónica, Mecánica y Sistemas">
+    
+    <style>
+        /* Variables y Reset */
+        :root {
+            --primary-cyan: #00D4FF;
+            --primary-green: #39FF14;
+            --secondary-blue-dark: #1e3c72;
+            --secondary-blue-light: #2a5298;
+            --secondary-blue-accent: #4A90E2;
+            --accent-gold: #FFD700;
+            --accent-orange: #F5A623;
+            --base-white: #FFFFFF;
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.22);
+            --shadow-dark: rgba(0, 0, 0, 0.25);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--secondary-blue-dark) 0%, var(--secondary-blue-light) 50%, var(--secondary-blue-accent) 100%);
+            min-height: 100vh;
+            color: var(--base-white);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Partículas de fondo */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .particles {
+                display: none;
+            }
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, var(--primary-cyan) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+            opacity: 0.3;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-100px) translateX(50px); }
+            50% { transform: translateY(-50px) translateX(-50px); }
+            75% { transform: translateY(-150px) translateX(25px); }
+        }
+
+        /* Contenedor principal */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header */
+        header {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 18px;
+            box-shadow: 0 8px 24px var(--shadow-dark);
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Escudo SVG */
+        .escudo {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .escudo:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 20px var(--primary-cyan));
+        }
+
+        /* Título con gradiente */
+        .titulo-principal {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .titulo-principal h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary-cyan), var(--primary-green), var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .titulo-principal .subtitulo {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .titulo-principal .lema {
+            font-size: 0.85rem;
+            font-style: italic;
+            opacity: 0.8;
+            margin-top: 3px;
+            color: var(--accent-gold);
+        }
+
+        /* Botones header */
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-header {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(14px);
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: var(--base-white);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-header:hover, .btn-header:focus-visible {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--primary-cyan);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Tabs de navegación */
+        .nav-tabs {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(14px);
+            border-radius: 18px;
+            padding: 10px;
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-cyan) transparent;
+        }
+
+        .nav-tabs::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .nav-tabs::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .nav-tabs::-webkit-scrollbar-thumb {
+            background: var(--primary-cyan);
+            border-radius: 3px;
+        }
+
+        .tab {
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 12px 20px;
+            border-radius: 25px;
+            color: var(--base-white);
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab:hover, .tab:focus-visible {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--primary-cyan);
+            filter: drop-shadow(0 0 10px var(--primary-cyan));
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, var(--primary-cyan), var(--primary-green));
+            border: none;
+            font-weight: 600;
+        }
+
+        /* Búsqueda */
+        .search-section {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(14px);
+            border-radius: 18px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 8px 24px var(--shadow-dark);
+        }
+
+        .search-main {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 12px 20px;
+            color: var(--base-white);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-cyan);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, var(--primary-cyan), var(--primary-green));
+            border: none;
+            border-radius: 25px;
+            padding: 12px 25px;
+            color: var(--base-white);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-btn:hover, .search-btn:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .advanced-toggle {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: var(--base-white);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .advanced-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-cyan);
+        }
+
+        /* Búsqueda avanzada */
+        .advanced-search {
+            display: none;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-top: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .advanced-search.active {
+            display: grid;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 8px 12px;
+            color: var(--base-white);
+            font-size: 0.95rem;
+        }
+
+        .filter-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .filter-group select option {
+            background: var(--secondary-blue-dark);
+        }
+
+        .filter-buttons {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        /* Módulos grid */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .module-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(14px);
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 8px 24px var(--shadow-dark);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-cyan), var(--primary-green));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px var(--shadow-dark);
+        }
+
+        .module-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .module-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .module-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-cyan);
+        }
+
+        .module-description {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        /* Recursos y fichas */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .resource-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(14px);
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 8px 24px var(--shadow-dark);
+            transition: var(--transition);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px var(--shadow-dark);
+        }
+
+        .resource-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .resource-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-cyan);
+            flex: 1;
+        }
+
+        .badges {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, var(--primary-cyan), var(--primary-green));
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        a .badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .badge.offline {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+        }
+
+        .badge.pdf {
+            background: linear-gradient(135deg, #f44336, #da190b);
+        }
+
+        .badge.zip {
+            background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+        }
+
+        .badge.html {
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+        }
+
+        .badge.online {
+            background: linear-gradient(135deg, #00D4FF, #0099FF);
+        }
+
+        .resource-meta {
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+        }
+
+        .resource-description {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
+        /* Barra de progreso */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-cyan), var(--primary-green));
+            border-radius: 3px;
+            width: 0;
+            transition: width 2s ease-in-out;
+        }
+
+        .progress-fill.active {
+            width: 75%;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(14px);
+            border-radius: 18px;
+            padding: 20px;
+            margin: 40px 0 20px;
+            text-align: center;
+            box-shadow: 0 8px 24px var(--shadow-dark);
+        }
+
+        /* Secciones ocultas */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-left {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .header-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .titulo-principal h1 {
+                font-size: 1.5rem;
+            }
+
+            .tab span {
+                display: none;
+            }
+
+            .tab {
+                padding: 12px;
+                font-size: 1.2rem;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-main {
+                flex-direction: column;
+            }
+
+            .advanced-search {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-buttons {
+                flex-direction: column;
+            }
+
+            .filter-buttons button {
+                width: 100%;
+            }
+        }
+
+        /* Accesibilidad - Focus visible */
+        :focus-visible {
+            outline: 2px solid var(--primary-cyan);
+            outline-offset: 2px;
+        }
+
+        /* Skip to content */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary-cyan);
+            color: var(--base-white);
+            padding: 8px;
+            z-index: 200;
+            text-decoration: none;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to content para accesibilidad -->
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    
+    <!-- Partículas animadas de fondo -->
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-left">
+                <!-- Escudo SVG -->
+                <svg class="escudo" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#F5A623;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <!-- Forma del escudo -->
+                    <path d="M50 10 L85 25 L85 70 L50 110 L15 70 L15 25 Z" 
+                          fill="#1e3c72" stroke="white" stroke-width="2"/>
+                    <!-- Franja superior dorada -->
+                    <rect x="15" y="25" width="70" height="15" fill="url(#goldGradient)"/>
+                    <!-- Diagonal dorada -->
+                    <path d="M15 40 L85 70 L85 55 L15 25 Z" fill="url(#goldGradient)"/>
+                    <!-- Parte inferior verde -->
+                    <path d="M15 70 L50 110 L85 70 Z" fill="#39FF14" opacity="0.8"/>
+                    <!-- Borde blanco -->
+                    <path d="M50 10 L85 25 L85 70 L50 110 L15 70 L15 25 Z" 
+                          fill="none" stroke="white" stroke-width="3"/>
+                </svg>
+                
+                <div class="titulo-principal">
+                    <h1>REPOSITORIO ROSARISTA</h1>
+                    <div class="subtitulo">I.E.T.I. Nuestra Señora del Rosario – Pitalito, Atlántico</div>
+                    <div class="lema">"Desarrollo Humano, Calidad de Vida"</div>
+                </div>
+            </div>
+            
+            <div class="header-buttons">
+                <button class="btn-header" aria-label="Asistente CAMI">
+                    <span>🤖</span>
+                    <span>CAMI</span>
+                </button>
+                <button class="btn-header" aria-label="Perfil de usuario">
+                    <span>👤</span>
+                    <span>Perfil</span>
+                </button>
+            </div>
+        </header>
+        
+        <!-- Tabs de navegación -->
+        <nav class="nav-tabs" role="tablist" aria-label="Navegación principal">
+            <button class="tab active" role="tab" aria-selected="true" onclick="goToSection('principal', event)" aria-label="Ir a página principal">
+                <span>🏠</span>
+                <span>Principal</span>
+            </button>
+            <button class="tab" role="tab" aria-selected="false" onclick="goToSection('comunidades', event)" aria-label="Ver comunidades">
+                <span>📚</span>
+                <span>Comunidades</span>
+            </button>
+            <button class="tab" role="tab" aria-selected="false" onclick="goToSection('modalidad', event)" aria-label="Buscar por modalidad">
+                <span>⚙️</span>
+                <span>Por Modalidad</span>
+            </button>
+            <button class="tab" role="tab" aria-selected="false" onclick="goToSection('grado', event)" aria-label="Buscar por grado">
+                <span>🎓</span>
+                <span>Por Grado</span>
+            </button>
+            <button class="tab" role="tab" aria-selected="false" onclick="goToSection('docente', event)" aria-label="Buscar por docente">
+                <span>👨‍🏫</span>
+                <span>Por Docente</span>
+            </button>
+            <button class="tab" role="tab" aria-selected="false" onclick="goToSection('fecha', event)" aria-label="Buscar por fecha">
+                <span>📅</span>
+                <span>Por Fecha</span>
+            </button>
+            <button class="tab" role="tab" aria-selected="false" onclick="goToSection('tipo', event)" aria-label="Buscar por tipo de recurso">
+                <span>📄</span>
+                <span>Tipo Recurso</span>
+            </button>
+        </nav>
+        
+        <!-- Búsqueda -->
+        <section class="search-section">
+            <div class="search-main">
+                <input type="text" 
+                       class="search-input" 
+                       id="searchInput" 
+                       placeholder="🔍 Buscar recursos..." 
+                       aria-label="Buscar recursos"
+                       onkeypress="if(event.key === 'Enter') performSearch()">
+                <button class="search-btn" onclick="performSearch()" aria-label="Realizar búsqueda">
+                    <span>🔍</span>
+                    <span>Buscar</span>
+                </button>
+                <button class="advanced-toggle" onclick="toggleAdvancedSearch()" aria-label="Mostrar búsqueda avanzada">
+                    Búsqueda avanzada
+                </button>
+            </div>
+            
+            <!-- Búsqueda avanzada -->
+            <div class="advanced-search" id="advancedSearch">
+                <div class="filter-group">
+                    <label for="filterTitle">Título</label>
+                    <input type="text" id="filterTitle" placeholder="Título del recurso">
+                </div>
+                <div class="filter-group">
+                    <label for="filterAuthor">Autor</label>
+                    <input type="text" id="filterAuthor" placeholder="Nombre del autor">
+                </div>
+                <div class="filter-group">
+                    <label for="filterModalidad">Modalidad</label>
+                    <select id="filterModalidad">
+                        <option value="">Todas</option>
+                        <option value="electronica">Electrónica</option>
+                        <option value="mecanica">Mecánica</option>
+                        <option value="sistemas">Sistemas</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterGrado">Grado</label>
+                    <select id="filterGrado">
+                        <option value="">Todos</option>
+                        <option value="9">9°</option>
+                        <option value="10">10°</option>
+                        <option value="11">11°</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterTipo">Tipo</label>
+                    <select id="filterTipo">
+                        <option value="">Todos</option>
+                        <option value="video">Video</option>
+                        <option value="simulacion">Simulación</option>
+                        <option value="manual">Manual</option>
+                        <option value="proyecto">Proyecto</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterFecha">Fecha desde</label>
+                    <input type="date" id="filterFecha">
+                </div>
+                <div class="filter-buttons">
+                    <button class="search-btn" onclick="performAdvancedSearch()">Aplicar filtros</button>
+                    <button class="btn-header" onclick="clearAdvancedSearch()">Limpiar</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contenido principal -->
+        <main id="main-content">
+            <!-- Sección Principal -->
+            <section id="principal" class="section active">
+                <!-- Barra de progreso -->
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                
+                <!-- Grid de módulos -->
+                <div class="modules-grid">
+                    <div class="module-card" onclick="openModule('electronica')">
+                        <div class="module-icon">📱</div>
+                        <h2 class="module-title">ELECTRÓNICA & IoT</h2>
+                        <p class="module-description">
+                            Circuitos, Arduino, sensores y automatización. Simulador 3D incluido.
+                        </p>
+                    </div>
+                    
+                    <div class="module-card disabled" onclick="event.stopPropagation();">
+                        <div class="module-icon">⚙️</div>
+                        <h2 class="module-title">MECÁNICA INDUSTRIAL</h2>
+                        <p class="module-description">
+                            CAD, manufactura, materiales y procesos.
+                        </p>
+                    </div>
+                    
+                    <div class="module-card disabled" onclick="event.stopPropagation();">
+                        <div class="module-icon">💻</div>
+                        <h2 class="module-title">SISTEMAS & PROGRAMACIÓN</h2>
+                        <p class="module-description">
+                            Web, apps, bases de datos y ciberseguridad.
+                        </p>
+                    </div>
+                    
+                    <div class="module-card disabled" onclick="event.stopPropagation();">
+                        <div class="module-icon">🔬</div>
+                        <h2 class="module-title">LABORATORIO VIRTUAL</h2>
+                        <p class="module-description">
+                            Simulaciones y calculadoras técnicas.
+                        </p>
+                    </div>
+                    
+                    <div class="module-card disabled" onclick="event.stopPropagation();">
+                        <div class="module-icon">🏭</div>
+                        <h2 class="module-title">INDUSTRIA 4.0</h2>
+                        <p class="module-description">
+                            Proyectos reales y certificaciones.
+                        </p>
+                    </div>
+                    
+                    <div class="module-card disabled" onclick="event.stopPropagation();">
+                        <div class="module-icon">🎮</div>
+                        <h2 class="module-title">DESAFÍOS & COMPETENCIAS</h2>
+                        <p class="module-description">
+                            Hackathons y rankings.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Sección de Electrónica (ejemplo con recursos) -->
+            <section id="electronica" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">📱 ELECTRÓNICA & IoT</h2>
+                <div class="resources-grid" id="electronicaResources">
+                    <!-- Los recursos se cargan dinámicamente con JS -->
+                </div>
+            </section>
+            
+            <!-- Sección de Comunidades -->
+            <section id="comunidades" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">📚 COMUNIDADES</h2>
+                <div class="modules-grid">
+                    <div class="module-card" onclick="openModule('matematicas')">
+                        <div class="module-icon">📐</div>
+                        <h2 class="module-title">MATEMÁTICAS & ESTADÍSTICA</h2>
+                        <p class="module-description">
+                            Recursos de álgebra, cálculo, estadística y geometría.
+                        </p>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('transversales')">
+                        <div class="module-icon">🌍</div>
+                        <h2 class="module-title">PROYECTOS TRANSVERSALES</h2>
+                        <p class="module-description">
+                            Proyectos interdisciplinarios y educación integral.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Secciones adicionales -->
+            <section id="modalidad" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">⚙️ POR MODALIDAD</h2>
+                <div class="resources-grid" id="modalidadResources"></div>
+            </section>
+            
+            <section id="grado" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">🎓 POR GRADO</h2>
+                <div class="modules-grid">
+                    <div class="module-card" onclick="filterByGrade(9)">
+                        <div class="module-icon">9️⃣</div>
+                        <h2 class="module-title">NOVENO GRADO</h2>
+                        <p class="module-description">Recursos para estudiantes de 9°</p>
+                    </div>
+                    <div class="module-card" onclick="filterByGrade(10)">
+                        <div class="module-icon">🔟</div>
+                        <h2 class="module-title">DÉCIMO GRADO</h2>
+                        <p class="module-description">Recursos para estudiantes de 10°</p>
+                    </div>
+                    <div class="module-card" onclick="filterByGrade(11)">
+                        <div class="module-icon">1️⃣1️⃣</div>
+                        <h2 class="module-title">UNDÉCIMO GRADO</h2>
+                        <p class="module-description">Recursos para estudiantes de 11°</p>
+                    </div>
+                </div>
+                <div class="resources-grid" id="gradoResources"></div>
+            </section>
+            
+            <section id="docente" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">👨‍🏫 POR DOCENTE</h2>
+                <div class="resources-grid" id="docenteResources"></div>
+            </section>
+            
+            <section id="fecha" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">📅 POR FECHA</h2>
+                <div class="resources-grid" id="fechaResources"></div>
+            </section>
+            
+            <section id="tipo" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">📄 TIPO DE RECURSO</h2>
+                <div class="resources-grid" id="tipoResources"></div>
+            </section>
+            
+            <section id="laboratorio" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">🔬 LABORATORIO VIRTUAL</h2>
+                <div class="modules-grid">
+                    <div class="module-card" onclick="openTool('simulador-circuitos')">
+                        <div class="module-icon">⚡</div>
+                        <h2 class="module-title">Simulador de Circuitos</h2>
+                        <p class="module-description">Diseña y prueba circuitos electrónicos</p>
+                    </div>
+                    <div class="module-card" onclick="openTool('calculadora-tecnica')">
+                        <div class="module-icon">🧮</div>
+                        <h2 class="module-title">Calculadoras Técnicas</h2>
+                        <p class="module-description">Herramientas de cálculo especializadas</p>
+                    </div>
+                    <div class="module-card" onclick="openTool('cad-online')">
+                        <div class="module-icon">📐</div>
+                        <h2 class="module-title">CAD Online</h2>
+                        <p class="module-description">Diseño asistido por computadora</p>
+                    </div>
+                    <div class="module-card" onclick="openTool('arduino-sim')">
+                        <div class="module-icon">🤖</div>
+                        <h2 class="module-title">Arduino Simulator</h2>
+                        <p class="module-description">Programa y simula proyectos Arduino</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="mecanica" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">⚙️ MECÁNICA INDUSTRIAL</h2>
+                <div class="resources-grid" id="mecanicaResources"></div>
+            </section>
+            
+            <section id="sistemas" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">💻 SISTEMAS & PROGRAMACIÓN</h2>
+                <div class="resources-grid" id="sistemasResources"></div>
+            </section>
+            
+            <section id="industria" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">🏭 INDUSTRIA 4.0</h2>
+                <div class="resources-grid" id="industriaResources"></div>
+            </section>
+            
+            <section id="desafios" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">🎮 DESAFÍOS & COMPETENCIAS</h2>
+                <div class="resources-grid" id="desafiosResources"></div>
+            </section>
+            
+            <section id="matematicas" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">📐 MATEMÁTICAS & ESTADÍSTICA</h2>
+                <div class="resources-grid" id="matematicasResources"></div>
+            </section>
+            
+            <section id="transversales" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">🌍 PROYECTOS TRANSVERSALES</h2>
+                <div class="resources-grid" id="transversalesResources"></div>
+            </section>
+            
+            <!-- Sección de resultados de búsqueda -->
+            <section id="searchResults" class="section">
+                <h2 style="font-size: 2rem; margin: 20px 0; text-align: center;">🔍 Resultados de Búsqueda</h2>
+                <div id="searchInfo" style="text-align: center; margin: 20px 0; font-size: 1.1rem;"></div>
+                <div class="resources-grid" id="searchResultsGrid"></div>
+                <div style="text-align: center; margin: 30px 0;">
+                    <button class="btn-header" onclick="goToSection('principal', event)" style="display: inline-block;">
+                        Volver al Inicio
+                    </button>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Footer -->
+        <footer>
+            <p>© 2025 I.E.T.I. Nuestra Señora del Rosario - Pitalito, Atlántico</p>
+            <p style="margin-top: 10px; opacity: 0.8;">Desarrollo Humano, Calidad de Vida</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Base de datos de recursos
+        const recursos = [
+            {
+                id: 3,
+                titulo: "Circuitos en Serie y Paralelo",
+                area: "Electrónica",
+                grado: 10,
+                tema: "Análisis de circuitos",
+                formatos: ['ONLINE', 'ZIP', 'PDF'],
+                conectividad: 'offline',
+                descripcion: "Prácticas guiadas para calcular V, I, R y P en serie/paralelo.",
+                seccion: ['electronica'],
+                tipo: 'manual',
+                link: 'https://carlossanjuan2025.github.io/serieparalelo/'
+            },
+            {
+                id: 2,
+                titulo: "Misión Rescate: Energía en Peligro",
+                area: "Electrónica",
+                grado: 10,
+                tema: "Electrónica básica",
+                formatos: ['ZIP', 'ONLINE'],
+                conectividad: 'offline',
+                descripcion: "Retos progresivos de componentes y mediciones.",
+                seccion: ['electronica'],
+                tipo: 'simulacion'
+            },
+            {
+                id: 1,
+                titulo: "Ohm-Vengers: La Resistencia del Conocimiento",
+                area: "Electrónica",
+                grado: 10,
+                tema: "Ley de Ohm",
+                formatos: ['ONLINE', 'PDF', 'ZIP'],
+                conectividad: 'offline',
+                descripcion: "Secuencia gamificada para aplicar V=IR con simulación.",
+                seccion: ['electronica'],
+                tipo: 'simulacion',
+                link: 'https://carlossanjuan2025.github.io/ohm-vengers-electricidad/',
+                pdfLink: 'https://drive.google.com/file/d/19-t5RdlKhjdb1jqqj7qVEkiZywBFG2By/view?usp=sharing',
+                offlineLink: 'https://drive.google.com/file/d/1pQQFY9yOco3cqAK9pOv8yhZg7fPFe_F5/view?usp=drive_link',
+                zipLink: 'https://drive.google.com/file/d/1lysJe8at-q5J0Eza0oqbXla0ZhZbN8IY/view?usp=sharing'
+            },
+            {
+                id: 4,
+                titulo: "Guía de Estadística – Medidas de dispersión",
+                area: "Matemáticas/Estadística",
+                grado: 9,
+                tema: "Dispersión",
+                formatos: ['PDF'],
+                conectividad: 'offline',
+                descripcion: "Guía completa sobre varianza, desviación estándar y rango.",
+                seccion: ['matematicas'],
+                tipo: 'manual'
+            },
+            {
+                id: 5,
+                titulo: "En la jugada con la vía",
+                area: "Proyectos transversales",
+                grado: 0,
+                tema: "Seguridad vial",
+                formatos: ['PDF'],
+                conectividad: 'offline',
+                descripcion: "Proyecto integral sobre seguridad vial y prevención.",
+                seccion: ['transversales', 'industria'],
+                tipo: 'proyecto'
+            }
+        ];
+        
+        // Función para generar badges
+        function generarBadges(recurso) {
+            let badges = [];
+            
+            // Enlaces específicos para "Ohm-Vengers"
+            if (recurso.id === 1) {
+                // Badge ONLINE con enlace
+                badges.push('<a href="https://carlossanjuan2025.github.io/ohm-vengers-electricidad/" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><span class="badge online" style="cursor: pointer;">ONLINE</span></a>');
+                
+                // Badge OFFLINE con enlace
+                badges.push('<a href="https://drive.google.com/file/d/1pQQFY9yOco3cqAK9pOv8yhZg7fPFe_F5/view?usp=drive_link" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><span class="badge offline" style="cursor: pointer;">OFFLINE</span></a>');
+                
+                // Badge PDF con enlace
+                badges.push('<a href="https://drive.google.com/file/d/19-t5RdlKhjdb1jqqj7qVEkiZywBFG2By/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><span class="badge pdf" style="cursor: pointer;">PDF</span></a>');
+                
+                // Badge ZIP con enlace
+                badges.push('<a href="https://drive.google.com/file/d/1lysJe8at-q5J0Eza0oqbXla0ZhZbN8IY/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><span class="badge zip" style="cursor: pointer;">ZIP</span></a>');
+            }
+            // Enlaces específicos para "Misión Rescate"
+            else if (recurso.id === 2) {
+                // Badge ONLINE (sin enlace por ahora)
+                badges.push('<span class="badge online">ONLINE</span>');
+                
+                // Badge OFFLINE
+                badges.push('<span class="badge offline">OFFLINE</span>');
+                
+                // Badge ZIP
+                badges.push('<span class="badge zip">ZIP</span>');
+            }
+            // Enlaces específicos para "Circuitos en Serie y Paralelo"
+            else if (recurso.id === 3) {
+                // Badge ONLINE con enlace
+                badges.push('<a href="https://carlossanjuan2025.github.io/serieparalelo/" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><span class="badge online" style="cursor: pointer;">ONLINE</span></a>');
+                
+                // Badge OFFLINE con enlace
+                badges.push('<a href="https://drive.google.com/file/d/1fRQSw2S5vH4TiDakALRgKbsITliJ1oz6/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><span class="badge offline" style="cursor: pointer;">OFFLINE</span></a>');
+                
+                // Badge PDF con enlace
+                badges.push('<a href="https://drive.google.com/file/d/19nK_x1-_Dy-tVY0rzbFAw-XntJKcvdgZ/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><span class="badge pdf" style="cursor: pointer;">PDF</span></a>');
+                
+                // Badge ZIP con enlace
+                badges.push('<a href="https://drive.google.com/file/d/1WtfIOU6PAsfxU5ylc8cay0KRZhe97s6r/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><span class="badge zip" style="cursor: pointer;">ZIP</span></a>');
+            } else {
+                // Badges normales sin enlaces para otros recursos
+                // Badge de conectividad
+                if (recurso.conectividad === 'offline') {
+                    badges.push('<span class="badge offline">OFFLINE</span>');
+                }
+                
+                // Badges de formato
+                if (recurso.formatos) {
+                    recurso.formatos.forEach(formato => {
+                        badges.push(`<span class="badge ${formato.toLowerCase()}">${formato}</span>`);
+                    });
+                }
+            }
+            
+            return badges.join('');
+        }
+        
+        // Función para crear tarjeta de recurso
+        function crearTarjetaRecurso(recurso) {
+            return `
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <h3 class="resource-title">${recurso.titulo}</h3>
+                    </div>
+                    <div class="badges">
+                        ${generarBadges(recurso)}
+                    </div>
+                    <div class="resource-meta">
+                        ${recurso.area} • ${recurso.grado > 0 ? recurso.grado + '°' : 'Todos'} • ${recurso.tema}
+                    </div>
+                    <p class="resource-description">
+                        ${recurso.descripcion}
+                    </p>
+                </div>
+            `;
+        }
+        
+        // Cargar recursos en secciones
+        function cargarRecursos() {
+            // Cargar recursos de electrónica en orden alfabético
+            const electronicaResources = recursos
+                .filter(r => r.seccion.includes('electronica'))
+                .sort((a, b) => a.titulo.localeCompare(b.titulo)); // Orden alfabético
+            
+            document.getElementById('electronicaResources').innerHTML = 
+                electronicaResources.map(r => crearTarjetaRecurso(r)).join('');
+            
+            // Cargar recursos de matemáticas
+            const matematicasResources = recursos.filter(r => r.seccion.includes('matematicas'));
+            document.getElementById('matematicasResources').innerHTML = 
+                matematicasResources.map(r => crearTarjetaRecurso(r)).join('');
+            
+            // Cargar proyectos transversales
+            const transversalesResources = recursos.filter(r => r.seccion.includes('transversales'));
+            document.getElementById('transversalesResources').innerHTML = 
+                transversalesResources.map(r => crearTarjetaRecurso(r)).join('');
+            
+            // Cargar en Industria 4.0 (incluye proyectos transversales destacados)
+            const industriaResources = recursos.filter(r => r.seccion.includes('industria'));
+            if (industriaResources.length > 0) {
+                document.getElementById('industriaResources').innerHTML = 
+                    industriaResources.map(r => crearTarjetaRecurso(r)).join('');
+            }
+        }
+        
+        // Navegación entre secciones
+        function goToSection(sectionId, event) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar la sección seleccionada
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Actualizar tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+            });
+            
+            // Activar el tab correspondiente si fue llamado desde un tab
+            if (event && event.currentTarget) {
+                const clickedTab = event.currentTarget;
+                if (clickedTab && clickedTab.classList.contains('tab')) {
+                    clickedTab.classList.add('active');
+                    clickedTab.setAttribute('aria-selected', 'true');
+                }
+            }
+        }
+        
+        // Abrir módulo
+        function openModule(moduleId) {
+            goToSection(moduleId);
+            
+            // Actualizar el tab activo
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+            });
+        }
+        
+        // Abrir herramienta del laboratorio
+        function openTool(toolId) {
+            alert(`Abriendo herramienta: ${toolId}`);
+            // Aquí se implementaría la lógica para abrir cada herramienta
+        }
+        
+        // Filtrar por grado
+        function filterByGrade(grade) {
+            const gradoResources = recursos.filter(r => r.grado === grade);
+            document.getElementById('gradoResources').innerHTML = 
+                gradoResources.map(r => crearTarjetaRecurso(r)).join('');
+        }
+        
+        // Búsqueda principal mejorada
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                alert('Por favor, ingrese un término de búsqueda');
+                return;
+            }
+            
+            // Buscar en todos los recursos
+            const resultados = recursos.filter(r => 
+                r.titulo.toLowerCase().includes(searchTerm) ||
+                r.descripcion.toLowerCase().includes(searchTerm) ||
+                r.area.toLowerCase().includes(searchTerm) ||
+                r.tema.toLowerCase().includes(searchTerm)
+            );
+            
+            // Mostrar sección de resultados
+            mostrarResultadosBusqueda(resultados, searchTerm);
+        }
+        
+        // Función para mostrar resultados de búsqueda
+        function mostrarResultadosBusqueda(resultados, termino) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar sección de resultados
+            const searchSection = document.getElementById('searchResults');
+            searchSection.classList.add('active');
+            
+            // Actualizar información de búsqueda
+            const searchInfo = document.getElementById('searchInfo');
+            if (resultados.length > 0) {
+                searchInfo.innerHTML = `Se encontraron <strong>${resultados.length}</strong> resultado(s) para "<strong>${termino}</strong>"`;
+                
+                // Mostrar recursos encontrados
+                const searchGrid = document.getElementById('searchResultsGrid');
+                searchGrid.innerHTML = resultados.map(r => crearTarjetaRecurso(r)).join('');
+            } else {
+                searchInfo.innerHTML = `No se encontraron resultados para "<strong>${termino}</strong>"`;
+                document.getElementById('searchResultsGrid').innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                        <p style="font-size: 1.2rem; opacity: 0.8;">
+                            No encontramos recursos que coincidan con tu búsqueda.
+                        </p>
+                        <p style="margin-top: 20px;">
+                            Intenta con otros términos como: <br>
+                            <strong>electrónica, circuitos, ohm, estadística, seguridad</strong>
+                        </p>
+                    </div>
+                `;
+            }
+            
+            // Limpiar selección de tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+            });
+        }
+        
+        // Toggle búsqueda avanzada
+        function toggleAdvancedSearch() {
+            const advancedSearch = document.getElementById('advancedSearch');
+            advancedSearch.classList.toggle('active');
+        }
+        
+        // Búsqueda avanzada mejorada
+        function performAdvancedSearch() {
+            const filters = {
+                titulo: document.getElementById('filterTitle').value.toLowerCase().trim(),
+                autor: document.getElementById('filterAuthor').value.toLowerCase().trim(),
+                modalidad: document.getElementById('filterModalidad').value,
+                grado: document.getElementById('filterGrado').value,
+                tipo: document.getElementById('filterTipo').value,
+                fecha: document.getElementById('filterFecha').value
+            };
+            
+            // Guardar filtros en localStorage
+            localStorage.setItem('advancedFilters', JSON.stringify(filters));
+            
+            // Aplicar filtros
+            let resultados = recursos;
+            
+            if (filters.titulo) {
+                resultados = resultados.filter(r => 
+                    r.titulo.toLowerCase().includes(filters.titulo)
+                );
+            }
+            
+            if (filters.modalidad) {
+                resultados = resultados.filter(r => 
+                    r.area.toLowerCase().includes(filters.modalidad)
+                );
+            }
+            
+            if (filters.grado) {
+                resultados = resultados.filter(r => 
+                    r.grado === parseInt(filters.grado)
+                );
+            }
+            
+            if (filters.tipo) {
+                resultados = resultados.filter(r => 
+                    r.tipo === filters.tipo
+                );
+            }
+            
+            // Construir término de búsqueda para mostrar
+            const terminos = [];
+            if (filters.titulo) terminos.push(`Título: "${filters.titulo}"`);
+            if (filters.modalidad) terminos.push(`Modalidad: ${filters.modalidad}`);
+            if (filters.grado) terminos.push(`Grado: ${filters.grado}°`);
+            if (filters.tipo) terminos.push(`Tipo: ${filters.tipo}`);
+            
+            const terminoBusqueda = terminos.length > 0 ? terminos.join(', ') : 'Búsqueda avanzada';
+            
+            // Mostrar resultados
+            mostrarResultadosBusqueda(resultados, terminoBusqueda);
+            
+            // Cerrar búsqueda avanzada
+            document.getElementById('advancedSearch').classList.remove('active');
+        }
+        
+        // Limpiar búsqueda avanzada
+        function clearAdvancedSearch() {
+            document.getElementById('filterTitle').value = '';
+            document.getElementById('filterAuthor').value = '';
+            document.getElementById('filterModalidad').value = '';
+            document.getElementById('filterGrado').value = '';
+            document.getElementById('filterTipo').value = '';
+            document.getElementById('filterFecha').value = '';
+            
+            // Limpiar localStorage
+            localStorage.removeItem('advancedFilters');
+            
+            // Limpiar campo de búsqueda principal también
+            document.getElementById('searchInput').value = '';
+        }
+        
+        // Crear partículas animadas
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.width = Math.random() * 50 + 10 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (Math.random() * 20 + 20) + 's';
+            
+            return particle;
+        }
+        
+        // Inicializar partículas (solo si no hay preferencia de movimiento reducido)
+        function initParticles() {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            
+            if (!prefersReducedMotion) {
+                const particlesContainer = document.getElementById('particles');
+                for (let i = 0; i < 10; i++) {
+                    particlesContainer.appendChild(createParticle());
+                }
+            }
+        }
+        
+        // Cargar filtros guardados
+        function loadSavedFilters() {
+            const savedFilters = localStorage.getItem('advancedFilters');
+            if (savedFilters) {
+                const filters = JSON.parse(savedFilters);
+                document.getElementById('filterTitle').value = filters.titulo || '';
+                document.getElementById('filterAuthor').value = filters.autor || '';
+                document.getElementById('filterModalidad').value = filters.modalidad || '';
+                document.getElementById('filterGrado').value = filters.grado || '';
+                document.getElementById('filterTipo').value = filters.tipo || '';
+                document.getElementById('filterFecha').value = filters.fecha || '';
+            }
+        }
+        
+        // Debounce para búsqueda con autocompletado
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            const searchTerm = e.target.value.toLowerCase().trim();
+            
+            // Búsqueda automática después de 300ms si hay más de 2 caracteres
+            searchTimeout = setTimeout(() => {
+                if (searchTerm.length > 2) {
+                    // Realizar búsqueda automática
+                    const resultados = recursos.filter(r => 
+                        r.titulo.toLowerCase().includes(searchTerm) ||
+                        r.descripcion.toLowerCase().includes(searchTerm) ||
+                        r.area.toLowerCase().includes(searchTerm) ||
+                        r.tema.toLowerCase().includes(searchTerm)
+                    );
+                    
+                    // Si hay resultados, mostrarlos automáticamente
+                    if (resultados.length > 0) {
+                        mostrarResultadosBusqueda(resultados, searchTerm);
+                    }
+                }
+            }, 300);
+        });
+        
+        // Inicialización al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar recursos
+            cargarRecursos();
+            
+            // Cargar filtros guardados
+            loadSavedFilters();
+            
+            // Inicializar partículas
+            initParticles();
+            
+            // Animar barra de progreso
+            setTimeout(() => {
+                document.getElementById('progressBar').classList.add('active');
+            }, 500);
+            
+            // Service Worker para modo offline (opcional)
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js').catch(err => {
+                    console.log('Service Worker no registrado:', err);
+                });
+            }
+        });
+        
+        // Prevenir envío de formulario con Enter en búsqueda avanzada
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                if (document.getElementById('advancedSearch').classList.contains('active')) {
+                    e.preventDefault();
+                    performAdvancedSearch();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
